@@ -4,7 +4,16 @@ import { fileURLToPath } from 'url';
 import { createRequire } from 'module';
 
 const require = createRequire(import.meta.url);
-const sharp = require('/home/juzipi/.local/lib/node_modules/@agegr/pi-web/node_modules/sharp');
+let sharp;
+try {
+  sharp = require('sharp');
+} catch {
+  try {
+    sharp = require('/home/juzipi/.local/lib/node_modules/@agegr/pi-web/node_modules/sharp');
+  } catch {
+    // Sharp not available
+  }
+}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
@@ -58,6 +67,10 @@ async function createIco(sourcePng, outputPath, sizes = [256, 128, 64, 48, 32, 1
 }
 
 async function main() {
+  if (!sharp) {
+    console.log('[Generate-Icons] sharp module not available, using existing icons.');
+    return;
+  }
   await createIco(srcPng, outIco);
   fs.copyFileSync(outIco, outBuildIco);
   await createIco(srcPng, outTrayIco, [32, 16]);
