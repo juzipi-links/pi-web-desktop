@@ -17,7 +17,7 @@
     "build": "npm run build:ts && electron-builder",
     "build:win": "npm run build:ts && electron-builder --win --x64",
     "build:win:portable": "npm run build:ts && electron-builder --win portable --x64",
-    "build:win:all": "npm run build:ts && electron-builder --win nsis portable --x64",
+    "build:win:all": "npm run build:ts && electron-builder --win --x64",
     "pack": "npm run build:ts && electron-builder --dir",
     "icons": "node scripts/generate-icons.mjs",
     "prepare-server": "node scripts/prepare-server.mjs"

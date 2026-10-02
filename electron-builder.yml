@@ -5,14 +5,21 @@ directories:
   output: release
   buildResources: build
 
+npmRebuild: false
+nodeGypRebuild: false
+
 files:
   - dist/**/*
   - assets/**/*
   - src/renderer/**/*
   - package.json
+  - node_modules/**/*
   - "!node_modules/@agegr/pi-web/.next/cache/**/*"
   - "!node_modules/@agegr/pi-web/.next/dev/**/*"
   - "!node_modules/@agegr/pi-web/.next/**/*.js.map"
+  - "!node_modules/*/**/*.md"
+  - "!node_modules/*/**/*.ts"
+  - "!node_modules/*/**/*.map"
 
 # Native modules and next server need to be unpacked on Windows
 asar: true
@@ -50,8 +57,9 @@ nsis:
   uninstallerIcon: assets/icon.ico
   deleteAppDataOnUninstall: false
   runAfterFinish: true
+  artifactName: ${productName}-Setup-${version}.${ext}
 
 portable:
-  artifactName: ${productName}-${version}-windows-portable.${ext}
+  artifactName: ${productName}-${version}-portable.${ext}
 
 publish: null
