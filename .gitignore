@@ -1,0 +1,16 @@
+# Node & Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+release/
+build/icon.ico
+
+# Environment & Settings
+.env
+.env.local
+.DS_Store
+Thumbs.db

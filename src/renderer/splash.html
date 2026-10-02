@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pi Web Desktop</title>
+  <link rel="stylesheet" href="splash.css">
+</head>
+<body>
+  <div class="container">
+    <div class="logo-wrapper">
+      <img src="../../assets/icon.png" alt="Pi Web Logo" class="logo" id="logo-img">
+    </div>
+    <h1>Pi Web Desktop</h1>
+    <div class="status-desc" id="status-text">Starting Pi agent server...</div>
+    <div class="spinner-bar" id="spinner"></div>
+
+    <div class="log-box" id="log-box"></div>
+
+    <div class="error-container" id="error-container">
+      <div id="error-message"></div>
+      <button class="retry-btn" id="retry-btn">Retry Startup</button>
+    </div>
+  </div>
+
+  <script>
+    const statusText = document.getElementById('status-text');
+    const spinner = document.getElementById('spinner');
+    const logBox = document.getElementById('log-box');
+    const errorContainer = document.getElementById('error-container');
+    const errorMessage = document.getElementById('error-message');
+    const retryBtn = document.getElementById('retry-btn');
+    const logoImg = document.getElementById('logo-img');
+
+    // Fallback for logo path if running from packaged resources
+    logoImg.onerror = () => {
+      logoImg.src = '../assets/icon.png';
+    };
+
+    function addLog(text) {
+      const line = document.createElement('div');
+      line.textContent = text;
+      logBox.prepend(line);
+      while (logBox.children.length > 50) {
+        logBox.removeChild(logBox.lastChild);
+      }
+    }
+
+    if (window.piDesktop) {
+      window.piDesktop.onServerLog((log) => {
+        addLog(log);
+        if (log.includes('Ready') || log.includes('Listening')) {
+          statusText.textContent = 'Server ready, opening workspace...';
+        }
+      });
+
+      window.piDesktop.onServerError((err) => {
+        statusText.textContent = 'Server encountered an issue';
+        spinner.style.display = 'none';
+        errorContainer.style.display = 'block';
+        errorMessage.textContent = err;
+      });
+
+      retryBtn.addEventListener('click', async () => {
+        errorContainer.style.display = 'none';
+        spinner.style.display = 'block';
+        statusText.textContent = 'Restarting Pi agent server...';
+        try {
+          await window.piDesktop.restartServer();
+        } catch (e) {
+          errorMessage.textContent = e.message || String(e);
+          errorContainer.style.display = 'block';
+          spinner.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

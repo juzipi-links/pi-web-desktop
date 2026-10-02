@@ -1,0 +1,36 @@
+{
+  "name": "pi-web-desktop",
+  "productName": "Pi Web Desktop",
+  "version": "0.10.0",
+  "description": "Native Windows Desktop App for Pi Web - Coding Agent GUI",
+  "main": "dist/main/index.js",
+  "author": "agegr",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/agegr/pi-web"
+  },
+  "scripts": {
+    "dev": "npm run build:ts && electron .",
+    "dev:watch": "tsc -w",
+    "build:ts": "tsc",
+    "build": "npm run build:ts && electron-builder",
+    "build:win": "npm run build:ts && electron-builder --win --x64",
+    "build:win:portable": "npm run build:ts && electron-builder --win portable --x64",
+    "build:win:all": "npm run build:ts && electron-builder --win nsis portable --x64",
+    "pack": "npm run build:ts && electron-builder --dir",
+    "icons": "node scripts/generate-icons.mjs",
+    "prepare-server": "node scripts/prepare-server.mjs"
+  },
+  "dependencies": {
+    "@agegr/pi-web": "^0.10.0",
+    "cross-env": "^7.0.3",
+    "tree-kill": "^1.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "electron": "^35.0.0",
+    "electron-builder": "^25.1.8",
+    "typescript": "^5.8.2"
+  }
+}
